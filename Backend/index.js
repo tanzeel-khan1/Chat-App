@@ -5,7 +5,6 @@ import cors from "cors";
 import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
 
-
 const app = express();
 dotenv.config();
 app.use(express.json());
