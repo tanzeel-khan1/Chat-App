@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
+import logger from "./middleware/logger.js"
 
 const app = express();
 dotenv.config();
@@ -20,6 +21,9 @@ try {
 } catch (error) {
   console.log(error);
 }
+
+app.use(logger);
+
 
 app.use("/api", userRoute);
 
