@@ -20,7 +20,7 @@ const Login = () => {
       password: data.password,
       confirmPassword: data.confirmPassword,
     };
-    Axios.post("http://localhost:5002/api/login", userInfo)
+    Axios.post("/api/login", userInfo)
       .then((response) => {
         console.log("Login  successful:", response.data);
         if (response.data) {

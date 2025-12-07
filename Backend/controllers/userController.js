@@ -202,10 +202,8 @@ export const getUserProfile = async (req, res) => {
     console.log("Logged-in user ID:", loggedInUserId);
 
     const allUsers = await User.find().select("-password -confirmPassword -__v");
-    console.log("All users in DB:", allUsers);
 
     const filteredUsers = allUsers.filter(user => user._id.toString() !== loggedInUserId.toString());
-    console.log("Filtered users (excluding logged-in):", filteredUsers);
 
     res.status(200).json(filteredUsers);
   } catch (error) {

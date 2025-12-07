@@ -26,7 +26,7 @@ const Signup = () => {
       password: data.password,
       confirmPassword: data.confirmPassword,
     };
-    await Axios.post("http://localhost:5002/api/signup", userInfo)
+    await Axios.post("/api/signup", userInfo)
       .then((response) => {
         console.log("Signup successful:", response.data);
         if (response.data.success) {
