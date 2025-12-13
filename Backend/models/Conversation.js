@@ -1,16 +1,13 @@
-
 import User from "./User.js";
 import Message from "./MessageModal.js";
 import mongoose from "mongoose";
 
-
 const conversationSchema = new mongoose.Schema(
   {
     participants: [
-      
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",  // STRING hona chahiye
+        ref: "User", // STRING hona chahiye
       },
     ],
     messages: [
