@@ -6,6 +6,7 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { useAuth } from "./context/AuthProvider";
 import { Navigate, Route, Routes } from "react-router-dom";
+import Loading from "./components/Loading "
 
 const App = () => {
   const { authUser, setAuthUser } = useAuth();
@@ -35,15 +36,8 @@ const App = () => {
 
         <Route path="/signup" element={authUser ? <Navigate to="/" /> :<Signup />} />
       </Routes>
-
-      {/* <div className='flex h-screen'>
-      <Logout/>
-      <Left/>
-      <Right/>
-      
-    </div> */}
-
-      {/* <Login/> */}
+{/* <Loading/> */}
+     
     </>
   );
 };
