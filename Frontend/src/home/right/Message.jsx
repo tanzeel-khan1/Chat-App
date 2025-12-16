@@ -1,7 +1,7 @@
 import React from "react";
 import Messages from "./Messages";
 import useGetMessages from "../../context/useGetMessages";
-import Loading from "../../components/Loading ";
+import Loading from "../../components/Loading"
 
 const Message = () => {
   const { messages, loading } = useGetMessages(); // lowercase

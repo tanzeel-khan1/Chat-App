@@ -1,20 +1,21 @@
-import React from 'react'
-import Chatuser from './Chatuser'
-import Message from './Message'
-import Type from './Type'
+import React from "react";
+import Chatuser from "./Chatuser";
+import Message from "./Message";
+import Type from "./Type";
 
 const Right = () => {
   return (
-    <div className=' w-[70%] bg-slate-950 text-white'>
-      
+    <div className=" w-[70%] bg-slate-950 text-white">
       <Chatuser />
-      <div  className="flex-babar overflow-y-auto" style={{maxHeight: "calc(88vh - 8vh"}}>
-              <Message/>
-
+      <div
+        className="flex-babar overflow-y-auto"
+        style={{ maxHeight: "calc(88vh - 8vh" }}
+      >
+        <Message />
       </div>
-      <Type/>
+      <Type />
     </div>
-  )
-}
+  );
+};
 
-export default Right
+export default Right;
