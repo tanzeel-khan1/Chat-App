@@ -1,22 +1,66 @@
 import Conversation from "../models/Conversation.js";
 import Message from "../models/MessageModal.js";
+import { getReceiverSocketId } from "../SocketIO/server.js"
 
+// export const sendMessages = async (req, res) => {
+//   try {
+//     const { message } = req.body;
+//     const receiverId = req.params.id; // ✅ URL se
+//     const senderId = req.user._id;
+
+//     // ✅ Validation
+//     if (!receiverId) {
+//       return res.status(400).json({ message: "Receiver ID is required" });
+//     }
+
+//     if (senderId.toString() === receiverId.toString()) {
+//       return res.status(400).json({
+//         message: "Sender and receiver cannot be the same",
+//       });
+//     }
+
+//     if (!message || !message.trim()) {
+//       return res.status(400).json({ message: "Message is required" });
+//     }
+
+//     let conversation = await Conversation.findOne({
+//       participants: { $all: [senderId, receiverId] },
+//     });
+
+//     if (!conversation) {
+//       conversation = await Conversation.create({
+//         participants: [senderId, receiverId],
+//         messages: [],
+//       });
+//     }
+
+//     const newMessage = await Message.create({
+//       sender: senderId,
+//       receiver: receiverId,
+//       message: message.trim(),
+//     });
+
+//     conversation.messages.push(newMessage._id);
+//     await conversation.save();
+//     http://localhost:4001/
+//     res.status(201).json({
+//       success: true,
+//       message: "Message sent successfully",
+//       data: newMessage,
+//     });
+//     const receiverSocketId = getReceiverSocketId(receiverId);
+//     if(receiverSocketId){
+//       io.to(receiverSocketId).emit("message", newMessage)
+//     }
+//     console.error("Error in sendMessages:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 export const sendMessages = async (req, res) => {
   try {
     const { message } = req.body;
-    const receiverId = req.params.id; // ✅ URL se
+    const receiverId = req.params.id;
     const senderId = req.user._id;
-
-    // ✅ Validation
-    if (!receiverId) {
-      return res.status(400).json({ message: "Receiver ID is required" });
-    }
-
-    if (senderId.toString() === receiverId.toString()) {
-      return res.status(400).json({
-        message: "Sender and receiver cannot be the same",
-      });
-    }
 
     if (!message || !message.trim()) {
       return res.status(400).json({ message: "Message is required" });
@@ -42,14 +86,27 @@ export const sendMessages = async (req, res) => {
     conversation.messages.push(newMessage._id);
     await conversation.save();
 
+    // ✅ SEND API RESPONSE FIRST (ONCE)
     res.status(201).json({
       success: true,
-      message: "Message sent successfully",
       data: newMessage,
     });
+
+    // ✅ REALTIME (response ke baad bhi allowed)
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    console.log("receiverSocketId:", receiverSocketId);
+
+    if (receiverSocketId && io) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
   } catch (error) {
-    console.error("Error in sendMessages:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("sendMessages error:", error);
+
+    // ⚠️ response already sent ho chuki ho to dobara mat bhejo
+    if (!res.headersSent) {
+      res.status(500).json({ message: "Server error" });
+    }
   }
 };
 

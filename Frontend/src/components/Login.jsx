@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import Axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { authUser, setAuthUser } = useAuth();
@@ -23,14 +24,14 @@ const Login = () => {
       .then((response) => {
         console.log("Login  successful:", response.data);
         if (response.data) {
-          alert("Login! You can now log in.");
+          toast.success("Login! You can now log in.");
         }
         localStorage.setItem("userInfo", JSON.stringify(response.data));
         setAuthUser(response.data);
       })
       .catch((error) => {
         if (error.response) {
-          alert("Signup failed" + error.response.data.message);
+          toast.error("Signup failed" + error.response.data.message);
         }
       });
   };

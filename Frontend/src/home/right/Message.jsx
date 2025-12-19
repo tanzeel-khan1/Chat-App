@@ -1,49 +1,117 @@
+// import React, { useEffect, useRef } from "react";
+// import Messages from "./Messages";
+// import useGetMessages from "../../context/useGetMessages";
+// import Loading from "../../components/Loading";
+// import useGetSocketMessage from "../../context/useGetSocketMessage";
+
+// // const Message = () => {
+// //   const { messages, loading } = useGetMessages();
+// //   useGetSocketMessage()
+// //   const lastMessageRef = useRef(null);
+
+// //   useEffect(() => {
+// //     if (messages.length > 0) {
+// //       lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+// //     }
+// //   }, [messages]);
+
+// //   if (loading) return <Loading />;
+
+// //   return (
+// //     <>
+// //       {messages.length > 0 ? (
+// //         messages.map((message, index) => (
+// //           <div
+// //             key={message._id}
+// //             ref={index === messages.length - 1 ? lastMessageRef : null}
+// //           >
+// //             <Messages message={message} />
+// //           </div>
+// //         ))
+// //       ) : (
+// //         <div className="min-h-[80vh] flex items-center justify-center">
+// //           <p className="font-bold">hi</p>
+// //         </div>
+// //       )}
+// //     </>
+// //   );
+// // };
+// const Message = () => {
+//   const { messages, loading } = useGetMessages();
+//   useGetSocketMessage(); // 🔥 now safe
+
+//   const lastMessageRef = useRef(null);
+
+//   useEffect(() => {
+//     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+//   }, [messages]);
+
+//   if (loading) return <Loading />;
+
+//   return (
+//     <>
+//       {messages.length > 0 ? (
+//         messages.map((message, index) => (
+//           <div
+//             key={message._id}
+//             ref={index === messages.length - 1 ? lastMessageRef : null}
+//           >
+//             <Messages message={message} />
+//           </div>
+//         ))
+//       ) : (
+//         <div className="min-h-[80vh] flex items-center justify-center">
+//           <p className="font-bold">hi</p>
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
+// export default Message;
 import React, { useEffect, useRef } from "react";
 import Messages from "./Messages";
 import useGetMessages from "../../context/useGetMessages";
 import Loading from "../../components/Loading";
+import useGetSocketMessage from "../../context/useGetSocketMessage";
+import useConversation from "../../stateman/useConversation";
 
 const Message = () => {
-  const { messages, loading } = useGetMessages(); // lowercase
-  const lastmessageRef = useRef();
+  const { messages = [] } = useConversation(); // ✅ yahan se messages
+  const { loading } = useGetMessages();        // ✅ sirf loading
+  useGetSocketMessage();
+
+  const lastMessageRef = useRef(null);
+
   useEffect(() => {
-    setTimeout(() => {
-      if (lastmessageRef.current) {
-        lastmessageRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
+    if (messages.length > 0) {
+      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
-  if (messages.length > 0) {
-    messages.forEach((msg, index) => {
-      console.log(`Message ${index + 1}:`, {
-        id: msg._id,
-        sender: msg.sender?._id || msg.sender,
-        message: msg.message,
-        receiver: msg.receiver,
-      });
-    });
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!loading && messages.length === 0) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <p className="opacity-60">No messages yet</p>
+      </div>
+    );
   }
 
   return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : (
-        messages.length > 0 &&
-        messages.map((message) => {
-          return <Messages key={message._id} message={message} />;
-        })
-      )}
-
-      <div style={{ minHeight: "calc(90vh - 10vh)" }}>
-        {!loading && messages.length === 0 && (
-          <div>
-            <p className="text-center font-bold mt-[40%]"> hi</p>
-          </div>
-        )}
-      </div>
-    </>
+    <div className="flex flex-col">
+      {messages.map((message, index) => (
+        <div
+          key={message._id || index}
+          ref={index === messages.length - 1 ? lastMessageRef : null}
+        >
+          <Messages message={message} />
+        </div>
+      ))}
+    </div>
   );
 };
 

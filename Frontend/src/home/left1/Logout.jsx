@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import axios from "axios";
 import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const Logout = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ const Logout = () => {
       localStorage.removeItem("userInfo");
       Cookies.remove("jwt");
 
-      alert("Logout successful");
+      toast.success("Logout successful");
 
     } catch (error) {
       console.log("Logout error:", error);
