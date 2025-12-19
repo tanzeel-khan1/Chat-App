@@ -34,18 +34,15 @@ export default function Right() {
   );
 }
 
-
 const NoChat = () => {
   const { authUser } = useAuth();
 
   return (
     <div className="flex items-center justify-center h-full">
       <h1 className="text-center text-gray-400">
-
-        
-          Welcome {authUser.user.name}, 
-          <br />
-          select a chat to start messaging
+        Welcome {authUser?.user?.name || "Guest"}, 
+        <br />
+        select a chat to start messaging
       </h1>
     </div>
   );

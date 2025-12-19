@@ -11,9 +11,9 @@ const User = () => {
       style={{ maxHeight: "calc(84vh - 10vh)" }}
       className="flex-babar overflow-y-auto"
     >
-{allUser.map((user,index) => {
-  return <Users key={index} user={user}/>
-})}    
+      {allUser.map((user, index) => {
+        return <Users key={index} user={user} />;
+      })}
     </div>
   );
 };

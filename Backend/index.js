@@ -6,8 +6,8 @@ import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
 import logger from "./middleware/logger.js"
 import MessageRoutes from "./routes/MessageRoutes.js"
+import {app, server} from "./SocketIO/server.js"
 
-const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(cors());
@@ -29,6 +29,6 @@ app.use(logger);
 app.use("/api", userRoute);
 app.use("/api/messages", MessageRoutes)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(` Server running on localhost ${PORT} `);
 });

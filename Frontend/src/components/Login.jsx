@@ -3,10 +3,9 @@ import Axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
 
-
 const Login = () => {
-    const { authUser, setAuthUser } = useAuth();
-  
+  const { authUser, setAuthUser } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -27,12 +26,11 @@ const Login = () => {
           alert("Login! You can now log in.");
         }
         localStorage.setItem("userInfo", JSON.stringify(response.data));
-                setAuthUser(response.data);
-
+        setAuthUser(response.data);
       })
       .catch((error) => {
         if (error.response) {
-          alert("Signup failed"+ error.response.data.message);
+          alert("Signup failed" + error.response.data.message);
         }
       });
   };
@@ -40,7 +38,6 @@ const Login = () => {
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-blue-50">
-
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white/80 backdrop-blur-xl p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-200"
@@ -68,8 +65,7 @@ const Login = () => {
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
-                    value:
-                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     message: "Enter a valid email",
                   },
                 })}
@@ -128,8 +124,12 @@ const Login = () => {
           {/* Footer */}
           <p className="text-sm text-gray-600 text-center mt-4">
             Don't have an account?
-            <Link to={"/signup"} className="text-blue-600 font-semibold cursor-pointer hover:underline">
-              {" "}Signup
+            <Link
+              to={"/signup"}
+              className="text-blue-600 font-semibold cursor-pointer hover:underline"
+            >
+              {" "}
+              Signup
             </Link>
           </p>
         </form>
