@@ -32,10 +32,15 @@ const Logout = () => {
   };
 
   return (
-    <div className="w-[4%] bg-slate-950 text-white flex flex-col justify-end">
+    <div className="w-[4%] min-w-[60px] bg-gradient-to-b from-slate-900 to-slate-950 text-white flex flex-col justify-end border-r border-slate-700">
       <div className="p-2">
-        <button onClick={handleLogout} disabled={loading}>
-          <RiLogoutBoxLine className="text-5xl p-3 cursor-pointer hover:bg-gray-600 hover:text-blue-800 rounded-full duration-300" />
+        <button 
+          onClick={handleLogout} 
+          disabled={loading}
+          className="w-full flex items-center justify-center group"
+          title="Logout"
+        >
+          <RiLogoutBoxLine className="text-3xl md:text-5xl p-2 md:p-3 cursor-pointer text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-full duration-300 transition-all group-hover:scale-110" />
         </button>
       </div>
     </div>

@@ -25,10 +25,10 @@ const Message = () => {
   if (!loading && messages.length === 0) {
     return (
       <div
-        className="min-h-[80vh] flex items-center justify-center p-4 bg-black"
+        className="min-h-[80vh] flex items-center justify-center p-4 bg-transparent"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <p className="opacity-60 text-white">No messages yet</p>
+        <p className="opacity-60 text-slate-400 text-sm md:text-base">No messages yet</p>
         <style>
           {`
             div::-webkit-scrollbar {
@@ -42,7 +42,7 @@ const Message = () => {
 
   return (
     <div
-      className="flex flex-col bg-black min-h-[80vh] p-4"
+      className="flex flex-col bg-transparent min-h-[80vh] p-2 md:p-4"
       style={{ overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       {messages.map((message, index) => (

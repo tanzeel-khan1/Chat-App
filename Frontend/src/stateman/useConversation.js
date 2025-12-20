@@ -12,13 +12,29 @@ const useConversation = create((set) => ({
 
   setMessages: (messages) =>
     set({
-      messages: Array.isArray(messages) ? messages : [], // 🔒 safety
+      messages: Array.isArray(messages) 
+        ? messages.filter((msg, index, self) => 
+            // Remove duplicates based on _id
+            index === self.findIndex((m) => m._id === msg._id)
+          )
+        : [], // 🔒 safety
     }),
 
   addMessage: (newMessage) =>
-    set((state) => ({
-      messages: [...state.messages, newMessage],
-    })),
+    set((state) => {
+      // Check if message already exists to prevent duplicates
+      const messageExists = state.messages.some(
+        (msg) => msg._id === newMessage._id
+      );
+      
+      if (messageExists) {
+        return state; // Don't add duplicate
+      }
+      
+      return {
+        messages: [...state.messages, newMessage],
+      };
+    }),
 }));
 
 export default useConversation;

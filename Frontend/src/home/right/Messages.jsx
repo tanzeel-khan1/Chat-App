@@ -11,8 +11,8 @@ const Messages = ({ message }) => {
   const itsme = String(senderId) === String(currentUserId);
 
   const chatColor = itsme
-    ? "bg-[#272A35] text-white"
-    : "bg-[#0766AD] text-white";
+    ? "bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg"
+    : "bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30";
 
   const roundedClass = itsme
     ? "rounded-xl rounded-br-none"
@@ -28,11 +28,11 @@ const Messages = ({ message }) => {
   });
 
   return (
-    <div className={`flex ${alignmentClass} w-full px-4 py-2`}>
+    <div className={`flex ${alignmentClass} w-full px-2 md:px-4 py-1 md:py-2`}>
       <div
-        className={`${chatColor} px-4 py-2 ${roundedClass} max-w-xs break-words`}
+        className={`${chatColor} px-3 md:px-4 py-2 ${roundedClass} max-w-[75%] md:max-w-xs break-words`}
       >
-        <p>{message.message}</p>
+        <p className="text-sm md:text-base">{message.message}</p>
         <span className="text-xs opacity-70 block text-right mt-1">
           {formattedTime}
         </span>

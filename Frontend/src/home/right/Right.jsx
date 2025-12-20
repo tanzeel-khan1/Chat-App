@@ -4,8 +4,9 @@ import Message from "./Message";
 import Type from "./Type";
 import useConversation from "../../stateman/useConversation";
 import { useAuth } from "../../context/AuthProvider";
+import { Menu } from "lucide-react";
 
-export default function Right() {
+export default function Right({ setShowSidebar }) {
   const { selectedConversation, setSelectedConversation } = useConversation();
 
   useEffect(() => {
@@ -13,20 +14,17 @@ export default function Right() {
   }, []);
 
   return (
-    <div className="w-[70%] h-screen flex flex-col bg-slate-950 text-white">
+    <div className="w-full md:w-[70%] h-screen flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
       {!selectedConversation ? (
-        <NoChat />
+        <NoChat setShowSidebar={setShowSidebar} />
       ) : (
         <>
-          {/* Header */}
-          <Chatuser />
+          <Chatuser setShowSidebar={setShowSidebar} />
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto">
             <Message />
           </div>
 
-          {/* Input */}
           <Type />
         </>
       )}
@@ -34,15 +32,25 @@ export default function Right() {
   );
 }
 
-const NoChat = () => {
+const NoChat = ({ setShowSidebar }) => {
   const { authUser } = useAuth();
 
   return (
-    <div className="flex-1 flex items-center justify-center">
-      <h1 className="text-center text-gray-400">
-        Welcome {authUser?.user?.name || "Guest"},
+    <div className="flex-1 flex flex-col items-center justify-center p-4">
+      {/* Mobile Menu Button */}
+      <div className="md:hidden w-full flex justify-start mb-4">
+        <button
+          onClick={() => setShowSidebar(true)}
+          className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
+      
+      <h1 className="text-center text-slate-400 text-base md:text-lg px-4">
+        Welcome <span className="text-blue-400 font-semibold">{authUser?.user?.name || "Guest"}</span>,
         <br />
-        select a chat to start messaging
+        <span className="text-slate-500">select a chat to start messaging</span>
       </h1>
     </div>
   );
