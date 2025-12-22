@@ -4,9 +4,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
-import logger from "./middleware/logger.js"
-import MessageRoutes from "./routes/MessageRoutes.js"
-import {app, server} from "./SocketIO/server.js"
+import logger from "./middleware/logger.js";
+import MessageRoutes from "./routes/MessageRoutes.js";
+import { app, server } from "./SocketIO/server.js";
 
 dotenv.config();
 app.use(express.json());
@@ -25,9 +25,8 @@ try {
 
 app.use(logger);
 
-
 app.use("/api", userRoute);
-app.use("/api/messages", MessageRoutes)
+app.use("/api/messages", MessageRoutes);
 
 server.listen(PORT, () => {
   console.log(` Server running on localhost ${PORT} `);
