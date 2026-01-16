@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import useDeleteMessage from "../../hooks/DeleteMsg";
 
-const Messages = ({ message }) => {
+const Messages = ({ message, onMessageDeleted }) => {
   const userInfoString = localStorage.getItem("userInfo");
   const authUser = userInfoString ? JSON.parse(userInfoString) : null;
 
@@ -27,15 +28,61 @@ const Messages = ({ message }) => {
     hour12: true,
   });
 
+  const { deleteMessage, loading, error } = useDeleteMessage();
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleDelete = async () => {
+    const result = await deleteMessage(message._id);
+    if (result?.success) {
+      setIsDeleted(true);
+      if (onMessageDeleted) onMessageDeleted(message._id);
+    }
+    setMenuOpen(false);
+  };
+
+  if (isDeleted) return null;
+
   return (
-    <div className={`flex ${alignmentClass} w-full px-2 md:px-4 py-1 md:py-2`}>
+    <div
+      className={`flex ${alignmentClass} w-full px-2 md:px-4 py-1 md:py-2 relative`}
+    >
       <div
-        className={`${chatColor} px-3 md:px-4 py-2 ${roundedClass} max-w-[75%] md:max-w-xs break-words`}
+        className={`${chatColor} px-4 py-3 ${roundedClass} max-w-[75%] md:max-w-sm break-words relative transition-transform duration-200 hover:scale-[1.02]`}
       >
-        <p className="text-sm md:text-base">{message.message}</p>
-        <span className="text-xs opacity-70 block text-right mt-1">
+        {/* Message text */}
+        <p className="text-sm md:text-base leading-relaxed">
+          {message.message}
+        </p>
+
+        {/* Time */}
+        <span className="text-xs opacity-70 block text-right mt-2">
           {formattedTime}
         </span>
+
+        {/* Three-dot menu */}
+        <div className="absolute top-2 right-2">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="cursor-pointer text-white text-lg p-1  rounded hover:text-black "
+          >
+            ⋮
+          </button>
+
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-28 bg-gray-800 text-white text-sm rounded-lg shadow-lg z-10 overflow-hidden">
+              <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="w-full text-left px-3 py-2 cursor-pointer hover:bg-white text-red-600 transition"
+              >
+                {loading ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
       </div>
     </div>
   );

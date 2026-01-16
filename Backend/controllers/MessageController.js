@@ -115,3 +115,42 @@ export const getAllMessages = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const deleteMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const userId = req.user._id; // currently logged in user
+
+    // Find the message
+    const message = await Message.findById(messageId);
+    if (!message) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    // ✅ Removed sender check
+    // Agar aap chaho ke sirf admin delete kar sake, yahan check kar sakte ho:
+    // if (!req.user.isAdmin) return res.status(403).json({ message: "Forbidden" });
+
+    // Remove the message from Conversation
+    await Conversation.updateOne(
+      { messages: messageId },
+      { $pull: { messages: messageId } }
+    );
+
+    // Delete the message
+    await Message.findByIdAndDelete(messageId);
+
+    // Realtime: Notify receiver that the message was deleted
+    if (message.receiver) {
+      const receiverSocketId = getReceiverSocketId(message.receiver.toString());
+      if (receiverSocketId && io) {
+        io.to(receiverSocketId).emit("messageDeleted", { messageId });
+      }
+    }
+
+    return res.status(200).json({ success: true, message: "Message deleted successfully" });
+  } catch (error) {
+    console.error("deleteMessage error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
