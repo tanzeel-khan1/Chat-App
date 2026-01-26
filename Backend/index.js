@@ -8,7 +8,6 @@ import logger from "./middleware/logger.js";
 import MessageRoutes from "./routes/MessageRoutes.js";
 import { app, server } from "./SocketIO/server.js";
 
-
 dotenv.config();
 app.use(express.json());
 app.use(cors());
