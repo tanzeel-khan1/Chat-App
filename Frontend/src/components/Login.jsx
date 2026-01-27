@@ -40,7 +40,7 @@ const Login = () => {
       >
         {/* Heading */}
         <h1 className="text-3xl font-extrabold text-center text-white">
-          Chat-App
+          Chat App
         </h1>
         <p className="text-sm text-gray-400 mt-1 text-center">
           Login to your account

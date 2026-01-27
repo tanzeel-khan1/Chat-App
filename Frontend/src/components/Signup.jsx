@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
@@ -6,7 +7,10 @@ import toast from "react-hot-toast";
 
 const Signup = () => {
   const { setAuthUser } = useAuth();
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -17,50 +21,24 @@ const navigate = useNavigate();
 
   const password = watch("password", "");
 
-  // const onSubmit = async (data) => {
-  //   const userInfo = {
-  //     name: data.username,
-  //     email: data.email,
-  //     password: data.password,
-  //     confirmPassword: data.confirmPassword,
-  //   };
+  const onSubmit = async (data) => {
+    const userInfo = {
+      name: data.username,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    };
 
-  //   await Axios.post("/api/signup", userInfo)
-  //     .then((response) => {
-  //       if (response.data.success) {
-  //         toast.success("Signup successful! You can now log in.");
-  //       }
-  //       localStorage.setItem("userInfo", JSON.stringify(response.data));
-  //       setAuthUser(response.data);
-  //     })
-  //     .catch((error) => {
-  //       if (error.response) {
-  //         toast.error(error.response.data.message);
-  //       }
-  //     });
-  // };
-const onSubmit = async (data) => {
-  const userInfo = {
-    name: data.username,
-    email: data.email,
-    password: data.password,
-    confirmPassword: data.confirmPassword,
-  };
-
-  try {
-    const response = await Axios.post("/api/signup", userInfo);
-
-    toast.success("Signup successful! Please login.");
-
-    navigate("/login"); // ✅ direct redirect
-
-  } catch (error) {
-    if (error.response) {
-      toast.error(error.response.data.message);
+    try {
+      await Axios.post("/api/signup", userInfo);
+      toast.success("Signup successful! Please login.");
+      navigate("/login");
+    } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data.message);
+      }
     }
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black">
@@ -70,7 +48,7 @@ const onSubmit = async (data) => {
       >
         {/* Heading */}
         <h1 className="text-3xl font-extrabold text-center text-white">
-          Chat-App
+          Chat App
         </h1>
         <p className="text-sm text-gray-400 mt-1 text-center">
           Create a new account
@@ -126,7 +104,7 @@ const onSubmit = async (data) => {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-300">
               Password
             </label>
@@ -135,11 +113,18 @@ const onSubmit = async (data) => {
                 required: "Password is required",
                 minLength: { value: 6, message: "Minimum 6 characters" },
               })}
-              type="password"
+              type={showPassword ? "text" : "password"}
               className="mt-1 w-full rounded-xl bg-gray-800 border border-gray-700 
-              text-white placeholder-gray-500 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              text-white placeholder-gray-500 p-3 pr-12 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Enter password"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-9 text-sm text-blue-400 hover:text-blue-300 cursor-pointer"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
             {errors.password && (
               <p className="text-red-400 text-xs mt-1">
                 {errors.password.message}
@@ -148,7 +133,7 @@ const onSubmit = async (data) => {
           </div>
 
           {/* Confirm Password */}
-          <div>
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-300">
               Confirm Password
             </label>
@@ -158,11 +143,20 @@ const onSubmit = async (data) => {
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               className="mt-1 w-full rounded-xl bg-gray-800 border border-gray-700 
-              text-white placeholder-gray-500 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              text-white placeholder-gray-500 p-3 pr-12 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Confirm password"
             />
+            <button
+              type="button"
+              onClick={() =>
+                setShowConfirmPassword(!showConfirmPassword)
+              }
+              className="absolute right-3 top-9 text-sm text-blue-400 hover:text-blue-300 cursor-pointer" 
+            >
+              {showConfirmPassword ? "Hide" : "Show"}
+            </button>
             {errors.confirmPassword && (
               <p className="text-red-400 text-xs mt-1">
                 {errors.confirmPassword.message}
@@ -173,7 +167,7 @@ const onSubmit = async (data) => {
           {/* Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-xl cursor-pointer font-semibold
+            className="w-full bg-blue-600 text-white p-3 cursor-pointer rounded-xl font-semibold
             hover:bg-blue-700 transition-all duration-300 shadow-lg"
           >
             Signup
@@ -183,10 +177,7 @@ const onSubmit = async (data) => {
         {/* Footer */}
         <p className="text-sm text-gray-400 text-center mt-4">
           Already have an account?
-          <Link
-            to="/login"
-            className="text-blue-500 font-semibold  ml-1"
-          >
+          <Link to="/login" className="text-blue-500 font-semibold ml-1">
             Login
           </Link>
         </p>

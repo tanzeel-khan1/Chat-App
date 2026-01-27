@@ -26,7 +26,7 @@ const Chatuser = ({ setShowSidebar }) => {
         onClick={handleBack}
         className="md:hidden p-2 hover:bg-slate-700 rounded-lg transition-colors"
       >
-        <ArrowLeft className="w-5 h-5 text-white" />
+        <ArrowLeft className="w-5 h-5 text-white cursor-pointer" />
       </button>
       
       <div className="relative flex-shrink-0">
